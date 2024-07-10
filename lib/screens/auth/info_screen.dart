@@ -26,15 +26,30 @@ class InfoScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("계정 삭제"),
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          title: const Text(
+            "계정 삭제",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           content: const Text("정말로 계정을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."),
           actions: <Widget>[
             TextButton(
-              child: const Text("취소"),
+              child: const Text(
+                "취소",
+                style: TextStyle(color: Colors.black),
+              ),
               onPressed: () => Navigator.of(context).pop(false),
             ),
             TextButton(
-              child: const Text("삭제"),
+              child: const Text(
+                "삭제",
+                style: TextStyle(color: Colors.black),
+              ),
               onPressed: () => Navigator.of(context).pop(true),
             ),
           ],
@@ -71,6 +86,13 @@ class InfoScreen extends StatelessWidget {
 
       // Sign out
       await FirebaseAuth.instance.signOut();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('계정이 삭제되었습니다.'),
+          backgroundColor: Colors.red,
+        ),
+      );
 
       // Navigate to LoginScreen
       Navigator.of(context).pushAndRemoveUntil(

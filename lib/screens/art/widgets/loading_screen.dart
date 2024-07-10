@@ -6,13 +6,10 @@ class LoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.black54,
-      body: Center(
-        child: SpinKitFadingCircle(
-          color: Colors.white,
-          size: 50.0,
-        ),
+    return const Center(
+      child: SpinKitFadingCircle(
+        color: Colors.white,
+        size: 50.0,
       ),
     );
   }
