@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1075772303539",
+    "project_id": "artistry-49ecb",
+    "storage_bucket": "artistry-49ecb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1075772303539:android:c150c57d6ae2cea7b7e8c6",
+        "android_client_info": {
+          "package_name": "student.developer.jinhyeon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1075772303539-du7li9k16fvjjt7ccn7q4i49idkvk4u0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJRWVYK-a-mDgwQ8xO8t1N9DbgXDz38Ts"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1075772303539-du7li9k16fvjjt7ccn7q4i49idkvk4u0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1075772303539-p4mq6ncg3h4seoo3p6dk08881fbva2od.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "student.developer.jinhyeon.artistry"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
