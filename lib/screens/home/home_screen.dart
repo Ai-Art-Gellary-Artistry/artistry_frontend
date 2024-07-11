@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:artistry/screens/art/add_art_screen.dart';
 import 'package:artistry/screens/art/detail_art_screen.dart';
 import 'package:artistry/screens/auth/info_screen.dart';
@@ -21,6 +23,18 @@ class _HomeScreenState extends State<HomeScreen>
   late AnimationController _controller;
   late Animation<Color?> _colorAnimation1;
   late Animation<Color?> _colorAnimation2;
+
+  final List<String> placeholderImages = [
+    'assets/images/emoji/astonished_face.png',
+    'assets/images/emoji/confounded_face.png',
+    'assets/images/emoji/dizzy_face.png',
+    'assets/images/emoji/face_savoring_food.png',
+    'assets/images/emoji/smiling_face_with_tear.png',
+    'assets/images/emoji/star_struck.png',
+    'assets/images/emoji/sleeping_face.png',
+    'assets/images/emoji/disappointed_face.png',
+    'assets/images/emoji/face_blowing_a_kiss.png',
+  ];
 
   @override
   void initState() {
@@ -137,13 +151,13 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        scrolledUnderElevation: 0,
+        scrolledUnderElevation: 1,
         centerTitle: false,
         title: const Text(
           "Artistry 갤러리",
           style: TextStyle(
             color: Colors.black,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w700,
           ),
         ),
         actions: [
@@ -161,16 +175,6 @@ class _HomeScreenState extends State<HomeScreen>
             },
           ),
         ],
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: Colors.black,
-                width: 2.0,
-              ),
-            ),
-          ),
-        ),
       ),
       endDrawer: Drawer(
         shape: RoundedRectangleBorder(
@@ -318,6 +322,9 @@ class _HomeScreenState extends State<HomeScreen>
                       itemBuilder: (context, index) {
                         var doc = snapshot.data!.docs[index];
                         var data = doc.data() as Map<String, dynamic>;
+                        var randomImage = placeholderImages[
+                            Random().nextInt(placeholderImages.length)];
+
                         return GestureDetector(
                           onLongPress: () {
                             _deleteArt(doc.id, data['index']);
@@ -335,7 +342,8 @@ class _HomeScreenState extends State<HomeScreen>
                             color: Colors.white,
                             elevation: 5,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                             clipBehavior: Clip.antiAlias,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -345,6 +353,20 @@ class _HomeScreenState extends State<HomeScreen>
                                     data['imageUrl'] ?? '',
                                     fit: BoxFit.cover,
                                     width: double.infinity,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent? loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      } else {
+                                        return Center(
+                                          child: Image.asset(
+                                            randomImage,
+                                            width: 80,
+                                          ),
+                                        );
+                                      }
+                                    },
                                   ),
                                 ),
                               ],

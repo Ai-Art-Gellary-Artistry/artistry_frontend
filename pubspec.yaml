@@ -76,11 +76,10 @@ flutter:
     - assets/
     - assets/logo.png
     - assets/images/
+    - assets/images/emoji/
     - assets/images/google_logo.png
     - assets/images/github_logo.png
     - assets/images/drawer_art.png
-    - assets/images/smiling_face_with_tear.png
-    - assets/images/star_struck.png
     
   # assets:
   #   - images/a_dot_burr.jpeg

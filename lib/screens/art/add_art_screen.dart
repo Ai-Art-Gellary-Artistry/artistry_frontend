@@ -53,7 +53,7 @@ class _AddArtScreenState extends State<AddArtScreen> {
         .doc(today)
         .get();
 
-    int maxUploads = _isProPlan ? 5 : 1;
+    int maxUploads = _isProPlan ? 5 : 50;
     int count = docSnapshot.data()?['count'] ?? 0;
 
     setState(() {
@@ -203,7 +203,12 @@ class _AddArtScreenState extends State<AddArtScreen> {
     return Scaffold(
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        title: const Text("예술작품 만들기"),
+        title: const Text(
+          "예술작품 만들기",
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             border: Border(
@@ -312,7 +317,7 @@ class _AddArtScreenState extends State<AddArtScreen> {
                     ),
                     child: _isLoading
                         ? Image.asset(
-                            "assets/images/astonished_face.png",
+                            "assets/images/emoji/astonished_face.png",
                             width: 35,
                           )
                         : const Text('제작하기'),

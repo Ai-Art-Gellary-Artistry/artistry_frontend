@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:artistry/screens/auth/widgets/github_sign_in_button.dart';
 import 'package:artistry/screens/auth/widgets/google_sign_in_button.dart';
 import 'package:artistry/screens/home/home_screen.dart';
@@ -33,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen>
       vsync: this,
     );
     _offsetAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.2),
+      begin: const Offset(0, 0.3),
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _controller!,
@@ -126,66 +128,91 @@ class _LoginScreenState extends State<LoginScreen>
     }
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 150),
-            SlideTransition(
-              position: _offsetAnimation!,
-              child: FadeTransition(
-                opacity: _fadeAnimation!,
-                child: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          "AI 아트 갤러리",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "ARTISTRY",
-                          style: TextStyle(
-                            fontSize: 42,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "ARTISTRY와 함께면\n당신도 예술가입니다.",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+      body: Stack(
+        children: [
+          Center(
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Image.asset(
+                'assets/images/drawer_art.png',
+                fit: BoxFit.cover,
               ),
             ),
-            const Spacer(),
-            Column(
+          ),
+          BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              color: Colors.black.withOpacity(0.3),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
               children: [
-                GoogleSignInButton(onPressed: _handleGoogleSignIn),
-                const SizedBox(height: 10),
-                GithubSignInButton(onPressed: _handleGitHubSignIn),
+                const SizedBox(height: 150),
+                SlideTransition(
+                  position: _offsetAnimation!,
+                  child: FadeTransition(
+                    opacity: _fadeAnimation!,
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "AI 아트 갤러리",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "ARTISTRY",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 42,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "ARTISTRY와 함께면\n당신도 예술가입니다.",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Column(
+                  children: [
+                    GoogleSignInButton(onPressed: _handleGoogleSignIn),
+                    const SizedBox(height: 10),
+                    GithubSignInButton(onPressed: _handleGitHubSignIn),
+                  ],
+                ),
+                const SizedBox(height: 100),
               ],
             ),
-            const SizedBox(height: 100),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

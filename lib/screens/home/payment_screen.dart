@@ -148,7 +148,7 @@ class _ProPlanScreenState extends State<ProPlanScreen> {
                       ),
                       child: _isLoadingCancel
                           ? Image.asset(
-                              "assets/images/smiling_face_with_tear.png",
+                              "assets/images/emoji/smiling_face_with_tear.png",
                               width: 35,
                             )
                           : const Text('구독 취소하기'),
@@ -177,7 +177,7 @@ class _ProPlanScreenState extends State<ProPlanScreen> {
                       ),
                       child: _isLoadingSubscribe
                           ? Image.asset(
-                              "assets/images/star_struck.png",
+                              "assets/images/emoji/star_struck.png",
                               width: 35,
                             )
                           : const Text('프로 플랜 구독하기 (월 3,000원)'),
