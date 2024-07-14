@@ -344,6 +344,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.17"
+  instagram_share:
+    dependency: "direct main"
+    description:
+      name: instagram_share
+      sha256: "6b6c8274912b30f97a6a43a3c6c1f8c89cd6d88b90c3eaeeb635b9535732ce60"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.1"
   intl:
     dependency: "direct main"
     description:
