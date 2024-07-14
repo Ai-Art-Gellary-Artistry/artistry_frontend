@@ -145,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen>
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withOpacity(0.1),
             ),
           ),
           Padding(

@@ -313,8 +313,8 @@ class _HomeScreenState extends State<HomeScreen>
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
-                        childAspectRatio: 0.8,
-                        crossAxisSpacing: 5,
+                        childAspectRatio: 0.75,
+                        crossAxisSpacing: 10,
                         mainAxisSpacing: 10,
                       ),
                       padding: const EdgeInsets.all(10),

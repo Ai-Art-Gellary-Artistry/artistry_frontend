@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -75,7 +76,7 @@ class _AddArtScreenState extends State<AddArtScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:8001/generate-image'),
+        Uri.parse('${dotenv.env['API_URL']}/generate-image'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
