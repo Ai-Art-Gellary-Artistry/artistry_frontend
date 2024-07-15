@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:artistry/models/art_model.dart';
+import 'package:share_plus/share_plus.dart';
 
 class AddArtScreen extends StatefulWidget {
   const AddArtScreen({super.key});
@@ -21,12 +22,10 @@ class _AddArtScreenState extends State<AddArtScreen> {
   final TextEditingController _descriptionController = TextEditingController();
   String? _imageUrl;
   bool _isImageGenerated = false;
-  User? _user;
 
   @override
   void initState() {
     super.initState();
-    _user = FirebaseAuth.instance.currentUser;
   }
 
   Future<void> _generateImage() async {
@@ -80,7 +79,11 @@ class _AddArtScreenState extends State<AddArtScreen> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const LoadingScreen()),
+      PageRouteBuilder(
+        pageBuilder: (context, animation1, animation2) => const LoadingScreen(),
+        transitionDuration: Duration.zero,
+        reverseTransitionDuration: Duration.zero,
+      ),
     );
 
     try {
@@ -155,6 +158,12 @@ class _AddArtScreenState extends State<AddArtScreen> {
     });
   }
 
+  void _shareImage() {
+    if (_imageUrl != null) {
+      Share.share('내가 만든 AI 작품을 확인해보세요!\n$_imageUrl');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -166,6 +175,14 @@ class _AddArtScreenState extends State<AddArtScreen> {
           title: const Text(
             "예술작품 만들기",
           ),
+          actions: _isImageGenerated
+              ? [
+                  IconButton(
+                    icon: const Icon(Icons.share),
+                    onPressed: _shareImage,
+                  ),
+                ]
+              : null,
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -186,16 +203,33 @@ class _AddArtScreenState extends State<AddArtScreen> {
                         child: Image.network(
                           _imageUrl!,
                           fit: BoxFit.cover,
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            } else {
+                              return const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.black,
+                                ),
+                              );
+                            }
+                          },
                         ),
                       )
                     : const Center(
                         child: Text(
-                          '이미지가 여기에 표시됩니다',
+                          '작품이 여기에 표시됩니다',
                           style: TextStyle(color: Colors.grey),
                         ),
                       ),
               ),
-              const SizedBox(height: 16),
+              const Padding(
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                child: Divider(
+                  thickness: 1.0,
+                ),
+              ),
               if (!_isImageGenerated) ...[
                 TextField(
                   controller: _promptController,
