@@ -25,15 +25,16 @@ class _HomeScreenState extends State<HomeScreen>
   late Animation<Color?> _colorAnimation2;
 
   final List<String> placeholderImages = [
-    'assets/images/emoji/astonished_face.png',
-    'assets/images/emoji/confounded_face.png',
-    'assets/images/emoji/dizzy_face.png',
-    'assets/images/emoji/face_savoring_food.png',
-    'assets/images/emoji/smiling_face_with_tear.png',
-    'assets/images/emoji/star_struck.png',
-    'assets/images/emoji/sleeping_face.png',
-    'assets/images/emoji/disappointed_face.png',
-    'assets/images/emoji/face_blowing_a_kiss.png',
+    'assets/images/emoji/emoji1.png',
+    'assets/images/emoji/emoji2.png',
+    'assets/images/emoji/emoji3.png',
+    'assets/images/emoji/emoji4.png',
+    'assets/images/emoji/emoji5.png',
+    'assets/images/emoji/emoji6.png',
+    'assets/images/emoji/emoji7.png',
+    'assets/images/emoji/emoji8.png',
+    'assets/images/emoji/emoji9.png',
+    'assets/images/emoji/emoji10.png',
   ];
 
   @override
@@ -383,7 +384,7 @@ class _HomeScreenState extends State<HomeScreen>
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 50),
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 50),
               child: AnimatedBuilder(
                 animation: _controller,
                 builder: (context, child) {

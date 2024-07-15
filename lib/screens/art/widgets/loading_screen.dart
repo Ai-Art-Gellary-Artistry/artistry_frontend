@@ -1,15 +1,48 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'dart:math';
 
-class LoadingScreen extends StatelessWidget {
+import 'package:flutter/material.dart';
+
+class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
 
   @override
+  State<LoadingScreen> createState() => _LoadingScreenState();
+}
+
+class _LoadingScreenState extends State<LoadingScreen> {
+  final List<String> placeholderImages = [
+    'assets/images/emoji/emoji1.png',
+    'assets/images/emoji/emoji2.png',
+    'assets/images/emoji/emoji3.png',
+    'assets/images/emoji/emoji4.png',
+    'assets/images/emoji/emoji5.png',
+    'assets/images/emoji/emoji6.png',
+    'assets/images/emoji/emoji7.png',
+    'assets/images/emoji/emoji8.png',
+    'assets/images/emoji/emoji9.png',
+    'assets/images/emoji/emoji10.png',
+  ];
+
+  @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: SpinKitFadingCircle(
-        color: Colors.white,
-        size: 50.0,
+    final randomImage =
+        placeholderImages[Random().nextInt(placeholderImages.length)];
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              randomImage,
+              width: 100,
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              '잠시만 기다려주세요...',
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
       ),
     );
   }

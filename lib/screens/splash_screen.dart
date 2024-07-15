@@ -1,4 +1,3 @@
-import 'package:artistry/const/color.dart';
 import 'package:artistry/screens/auth/login_screen.dart';
 import 'package:artistry/screens/home/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';

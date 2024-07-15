@@ -7,12 +7,12 @@ class GradientButton extends StatelessWidget {
   final Gradient gradient;
 
   const GradientButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.text,
     required this.icon,
     required this.gradient,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

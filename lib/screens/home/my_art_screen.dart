@@ -41,8 +41,7 @@ class _MyArtScreenState extends State<MyArtScreen> {
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             print(
                 "No data found for user: ${currentUser?.uid}"); // 데이터가 없을 때 로그 출력
-            return const Center(
-                child: Text('You haven\'t uploaded any artworks yet.'));
+            return const Center(child: Text('현재 제작한 작품이 없습니다.'));
           }
 
           print(
