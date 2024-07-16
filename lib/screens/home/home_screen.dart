@@ -5,6 +5,7 @@ import 'package:artistry/screens/art/detail_art_screen.dart';
 import 'package:artistry/screens/auth/info_screen.dart';
 import 'package:artistry/screens/home/my_art_screen.dart';
 import 'package:artistry/screens/home/payment_screen.dart';
+import 'package:artistry/screens/home/save_art_screen.dart';
 import 'package:artistry/screens/home/widgets/gradient_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -258,6 +259,14 @@ class _HomeScreenState extends State<HomeScreen>
                   context,
                   MaterialPageRoute(builder: (context) => const MyArtScreen()),
                 );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.bookmark),
+              title: const Text("저장된 작품"),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SavedArtScreen()));
               },
             ),
             ListTile(

@@ -1,3 +1,4 @@
+import 'package:artistry/screens/home/widgets/loading_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -54,6 +55,16 @@ class _ProPlanScreenState extends State<ProPlanScreen> {
   }
 
   Future<void> _simulateSubscribe() async {
+    // Navigator.push(
+    //   context,
+    //   PageRouteBuilder(
+    //     pageBuilder: (context, animation1, animation2) =>
+    //         LoadingScreen(text: "결제중입니다"),
+    //     transitionDuration: Duration.zero,
+    //     reverseTransitionDuration: Duration.zero,
+    //   ),
+    // );
+
     setState(() {
       _isLoadingSubscribe = true;
     });
@@ -122,8 +133,8 @@ class _ProPlanScreenState extends State<ProPlanScreen> {
             Text('이름: ${user?.displayName ?? "이름 없음"}'),
             const SizedBox(height: 10),
             Text('이메일: ${user?.email ?? "이메일 없음"}'),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
+            const Padding(
+              padding: EdgeInsets.all(20.0),
               child: Divider(
                 thickness: 1.0,
               ),

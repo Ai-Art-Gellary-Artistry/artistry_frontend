@@ -1,11 +1,20 @@
-// loading_screen.dart
 import 'dart:math';
-import 'package:artistry/screens/art/widgets/animated_loading_text.dart';
+
 import 'package:flutter/material.dart';
 
-class LoadingScreen extends StatelessWidget {
-  LoadingScreen({super.key});
+class LoadingScreen extends StatefulWidget {
+  final String text;
 
+  const LoadingScreen({
+    super.key,
+    required this.text,
+  });
+
+  @override
+  State<LoadingScreen> createState() => _LoadingScreenState();
+}
+
+class _LoadingScreenState extends State<LoadingScreen> {
   final List<String> placeholderImages = [
     'assets/images/emoji/emoji1.png',
     'assets/images/emoji/emoji2.png',
@@ -33,12 +42,9 @@ class LoadingScreen extends StatelessWidget {
               width: 100,
             ),
             const SizedBox(height: 20),
-            const AnimatedLoadingText(
-              text: '잠시만 기다려주세요',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            Text(
+              widget.text,
+              style: const TextStyle(fontSize: 18),
             ),
           ],
         ),

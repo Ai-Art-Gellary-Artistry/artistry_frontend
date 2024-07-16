@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path_provider/path_provider.dart';
-// import 'package:permission_handler/permission_handler.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,11 +18,32 @@ class DetailArtScreen extends StatefulWidget {
 
 class _DetailArtScreenState extends State<DetailArtScreen> {
   late Map<String, dynamic> _artData;
+  bool _isSaved = false;
+  String? _savedDocId;
 
   @override
   void initState() {
     super.initState();
     _artData = widget.artData;
+    _checkIfSaved();
+  }
+
+  void _checkIfSaved() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) return;
+
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('savedArts')
+        .where('userId', isEqualTo: currentUser.uid)
+        .where('artId', isEqualTo: _artData['id'])
+        .get();
+
+    setState(() {
+      _isSaved = querySnapshot.docs.isNotEmpty;
+      if (_isSaved) {
+        _savedDocId = querySnapshot.docs.first.id;
+      }
+    });
   }
 
   @override
@@ -41,13 +61,17 @@ class _DetailArtScreenState extends State<DetailArtScreen> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.share),
-            onPressed: () => _shareArtwork(),
+            icon: Icon(_isSaved ? Icons.bookmark : Icons.bookmark_border),
+            onPressed: _toggleSaveArtwork,
+          ),
+          IconButton(
+            icon: const Icon(Icons.share),
+            onPressed: _shareArtwork,
           ),
           if (isCurrentUserArt)
             IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () => _deleteArtwork(),
+              icon: const Icon(Icons.delete),
+              onPressed: _deleteArtwork,
             ),
         ],
       ),
@@ -90,6 +114,57 @@ class _DetailArtScreenState extends State<DetailArtScreen> {
     );
   }
 
+  void _toggleSaveArtwork() async {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('로그인이 필요합니다.')),
+      );
+      return;
+    }
+
+    setState(() {
+      _isSaved = !_isSaved;
+    });
+
+    try {
+      if (_isSaved) {
+        // 저장
+        final docRef =
+            await FirebaseFirestore.instance.collection('savedArts').add({
+          'userId': currentUser.uid,
+          'artId': _artData['id'],
+          'savedAt': FieldValue.serverTimestamp(),
+        });
+        _savedDocId = docRef.id;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('작품이 저장되었습니다.')),
+        );
+      } else {
+        // 저장 취소
+        if (_savedDocId != null) {
+          await FirebaseFirestore.instance
+              .collection('savedArts')
+              .doc(_savedDocId)
+              .delete();
+          _savedDocId = null;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('작품 저장이 취소되었습니다.')),
+          );
+        }
+      }
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('작업 중 오류가 발생했습니다: $e')),
+      );
+      // 에러 발생 시 상태를 되돌립니다.
+      setState(() {
+        _isSaved = !_isSaved;
+      });
+    }
+  }
+
   Future<void> _shareArtwork() async {
     try {
       // 이미지 URL 가져오기
@@ -123,17 +198,17 @@ class _DetailArtScreenState extends State<DetailArtScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          title: Text(
+          title: const Text(
             "작품 삭제",
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w500,
             ),
           ),
-          content: Text("이 작품을 정말 삭제하시겠습니까?"),
+          content: const Text("이 작품을 정말 삭제하시겠습니까?"),
           actions: <Widget>[
             TextButton(
-              child: Text(
+              child: const Text(
                 "취소",
                 style: TextStyle(
                   color: Colors.black,
@@ -144,7 +219,7 @@ class _DetailArtScreenState extends State<DetailArtScreen> {
               },
             ),
             TextButton(
-              child: Text(
+              child: const Text(
                 "삭제",
                 style: TextStyle(
                   color: Colors.black,
@@ -161,7 +236,7 @@ class _DetailArtScreenState extends State<DetailArtScreen> {
     );
   }
 
-  void _confirmDeleteArtwork() async {
+  Future<void> _confirmDeleteArtwork() async {
     try {
       // Firestore에서 문서 삭제
       await FirebaseFirestore.instance
@@ -173,6 +248,16 @@ class _DetailArtScreenState extends State<DetailArtScreen> {
       final storageRef =
           FirebaseStorage.instance.refFromURL(_artData['imageUrl']);
       await storageRef.delete();
+
+      // savedArts 컬렉션에서 해당 작품의 저장 기록 삭제
+      final savedArtsQuery = await FirebaseFirestore.instance
+          .collection('savedArts')
+          .where('artId', isEqualTo: _artData['id'])
+          .get();
+
+      for (var doc in savedArtsQuery.docs) {
+        await doc.reference.delete();
+      }
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

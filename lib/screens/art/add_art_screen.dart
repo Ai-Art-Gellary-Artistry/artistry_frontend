@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:artistry/screens/art/widgets/complete_screen.dart';
 import 'package:artistry/screens/art/widgets/loading_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_storage/firebase_storage.dart';
@@ -29,10 +31,16 @@ class _AddArtScreenState extends State<AddArtScreen> {
   }
 
   Future<void> _generateImage() async {
+    if (_promptController.text.length < 5) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('작품 내용은 5자 이상 입력해주세요.')),
+      );
+      return;
+    }
     Navigator.push(
       context,
       PageRouteBuilder(
-        pageBuilder: (context, animation1, animation2) => const LoadingScreen(),
+        pageBuilder: (context, animation1, animation2) => LoadingScreen(),
         transitionDuration: Duration.zero,
         reverseTransitionDuration: Duration.zero,
       ),
@@ -55,15 +63,47 @@ class _AddArtScreenState extends State<AddArtScreen> {
           _imageUrl = result['image_url'];
           _isImageGenerated = true;
         });
+
+        HapticFeedback.heavyImpact();
+        await Future.delayed(const Duration(milliseconds: 100));
+        await HapticFeedback.heavyImpact();
+
+        // LoadingScreen을 닫고 CompleteScreen으로 부드럽게 전환
+        Navigator.pushReplacement(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                const CompleteScreen(),
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              const begin = Offset(0.0, 1.0);
+              const end = Offset.zero;
+              const curve = Curves.ease;
+
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            },
+            transitionDuration: const Duration(milliseconds: 500),
+          ),
+        );
+
+        await Future.delayed(const Duration(seconds: 3));
+        if (mounted) {
+          Navigator.of(context).pop();
+        }
       } else {
         throw Exception('Failed to generate image');
       }
     } catch (e) {
+      Navigator.pop(context); // LoadingScreen 닫기
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );
-    } finally {
-      Navigator.pop(context); // LoadingScreen 닫기
     }
   }
 
@@ -80,7 +120,7 @@ class _AddArtScreenState extends State<AddArtScreen> {
     Navigator.push(
       context,
       PageRouteBuilder(
-        pageBuilder: (context, animation1, animation2) => const LoadingScreen(),
+        pageBuilder: (context, animation1, animation2) => LoadingScreen(),
         transitionDuration: Duration.zero,
         reverseTransitionDuration: Duration.zero,
       ),
@@ -241,6 +281,9 @@ class _AddArtScreenState extends State<AddArtScreen> {
                       borderSide: BorderSide(color: Colors.black),
                     ),
                   ),
+                  inputFormatters: [
+                    LengthLimitingTextInputFormatter(50),
+                  ],
                   cursorColor: Colors.black,
                   maxLines: 3,
                 ),

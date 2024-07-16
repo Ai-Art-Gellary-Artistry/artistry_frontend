@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +15,32 @@ class MyArtScreen extends StatefulWidget {
 class _MyArtScreenState extends State<MyArtScreen> {
   final User? currentUser = FirebaseAuth.instance.currentUser;
 
+  final List<String> placeholderImages = [
+    'assets/images/emoji/emoji1.png',
+    'assets/images/emoji/emoji2.png',
+    'assets/images/emoji/emoji3.png',
+    'assets/images/emoji/emoji4.png',
+    'assets/images/emoji/emoji5.png',
+    'assets/images/emoji/emoji6.png',
+    'assets/images/emoji/emoji7.png',
+    'assets/images/emoji/emoji8.png',
+    'assets/images/emoji/emoji9.png',
+    'assets/images/emoji/emoji10.png',
+  ];
+
+  Future<void> _deleteArt(String docId, int index) async {
+    final artsCollection = FirebaseFirestore.instance.collection('arts');
+
+    await artsCollection.doc(docId).delete();
+
+    final querySnapshot =
+        await artsCollection.orderBy('index').startAfter([index]).get();
+
+    for (var doc in querySnapshot.docs) {
+      await doc.reference.update({'index': FieldValue.increment(-1)});
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -22,6 +50,7 @@ class _MyArtScreenState extends State<MyArtScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: false,
         title: const Text('My Artworks'),
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -39,13 +68,8 @@ class _MyArtScreenState extends State<MyArtScreen> {
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            print(
-                "No data found for user: ${currentUser?.uid}"); // 데이터가 없을 때 로그 출력
             return const Center(child: Text('현재 제작한 작품이 없습니다.'));
           }
-
-          print(
-              "Number of artworks found: ${snapshot.data!.docs.length}"); // 찾은 아트워크 수 출력
 
           return GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -59,7 +83,13 @@ class _MyArtScreenState extends State<MyArtScreen> {
             itemBuilder: (context, index) {
               var doc = snapshot.data!.docs[index];
               var data = doc.data() as Map<String, dynamic>;
+              var randomImage =
+                  placeholderImages[Random().nextInt(placeholderImages.length)];
+
               return GestureDetector(
+                onLongPress: () {
+                  _deleteArt(doc.id, data['index']);
+                },
                 onTap: () {
                   Navigator.push(
                     context,
@@ -69,8 +99,11 @@ class _MyArtScreenState extends State<MyArtScreen> {
                   );
                 },
                 child: Card(
-                  elevation: 5,
                   color: Colors.white,
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   clipBehavior: Clip.antiAlias,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,6 +113,19 @@ class _MyArtScreenState extends State<MyArtScreen> {
                           data['imageUrl'] ?? '',
                           fit: BoxFit.cover,
                           width: double.infinity,
+                          loadingBuilder: (BuildContext context, Widget child,
+                              ImageChunkEvent? loadingProgress) {
+                            if (loadingProgress == null) {
+                              return child;
+                            } else {
+                              return Center(
+                                child: Image.asset(
+                                  randomImage,
+                                  width: 80,
+                                ),
+                              );
+                            }
+                          },
                         ),
                       ),
                     ],

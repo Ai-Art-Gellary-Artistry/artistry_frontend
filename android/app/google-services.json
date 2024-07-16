@@ -9,10 +9,18 @@
       "client_info": {
         "mobilesdk_app_id": "1:1075772303539:android:c150c57d6ae2cea7b7e8c6",
         "android_client_info": {
-          "package_name": "student.developer.jinhyeon"
+          "package_name": "student.developer.jinhyeon.artistry"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1075772303539-2kqm8kg06flssc7nbseq0v6k9uc1p26p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "student.developer.jinhyeon.artistry",
+            "certificate_hash": "9eee0d442db98506c5f61a5ee4249d92c05f1012"
+          }
+        },
         {
           "client_id": "1075772303539-du7li9k16fvjjt7ccn7q4i49idkvk4u0.apps.googleusercontent.com",
           "client_type": 3

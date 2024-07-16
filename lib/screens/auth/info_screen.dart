@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:artistry/screens/auth/login_screen.dart'; // LoginScreen import 추가
+import 'package:artistry/screens/auth/login_screen.dart';
 
 class InfoScreen extends StatelessWidget {
   const InfoScreen({super.key});
@@ -135,7 +135,12 @@ class InfoScreen extends StatelessWidget {
             Text('이름: ${user?.displayName ?? "이름 없음"}'),
             const SizedBox(height: 10),
             Text('이메일: ${user?.email ?? "이메일 없음"}'),
-            const Spacer(),
+            const Padding(
+              padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+              child: Divider(
+                thickness: 1.0,
+              ),
+            ),
             SizedBox(
               width: MediaQuery.of(context).size.width / 1.2,
               child: ElevatedButton(

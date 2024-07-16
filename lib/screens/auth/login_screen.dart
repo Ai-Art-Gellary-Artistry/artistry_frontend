@@ -81,9 +81,9 @@ class _LoginScreenState extends State<LoginScreen>
         }
       }
     } catch (error) {
-      print(error);
+      print('Error during Google sign in: $error');
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Google 로그인에 실패했습니다. 다시 시도해주세요.')),
+        SnackBar(content: Text('Google 로그인에 실패했습니다. 오류: $error')),
       );
     }
   }
