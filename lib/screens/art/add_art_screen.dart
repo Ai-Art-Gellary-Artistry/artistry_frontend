@@ -112,7 +112,7 @@ class _AddArtScreenState extends State<AddArtScreen> {
         _titleController.text.isEmpty ||
         _descriptionController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('모든 항목을 채우고 다시 눌러주세요!')),
+        const SnackBar(content: Text('모든 항목을 채우고 다시 눌러주세요.')),
       );
       return;
     }
