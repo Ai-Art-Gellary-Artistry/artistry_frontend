@@ -51,10 +51,6 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Image.asset(
-            //   'assets/logo.png',
-            //   width: 100,
-            // ),
             Text(
               "Artistry",
               style: TextStyle(
