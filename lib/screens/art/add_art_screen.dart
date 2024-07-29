@@ -33,7 +33,7 @@ class _AddArtScreenState extends State<AddArtScreen> {
   Future<void> _generateImage() async {
     if (_promptController.text.length < 5) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('작품 내용은 5자 이상 입력해주세요.')),
+        const SnackBar(content: Text('작품 내용은 5자 이상을 입력해주세요.')),
       );
       return;
     }
